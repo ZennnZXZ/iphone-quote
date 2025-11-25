@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Quote iPhone</title>
+    <!-- Memuat Tailwind CSS untuk styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles untuk memastikan textarea dan gambar terlihat baik */
+        #quoteImage {
+            max-width: 100%;
+            height: auto;
+            transition: opacity 0.3s;
+        }
+        .hidden {
+            display: none;
+        }
+        .container {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+
+    <div id="app" class="container bg-white p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-lg">
+        
+        <h1 class="text-3xl font-bold text-center text-indigo-600 mb-6">
+            📱 Generator Quote iPhone
+        </h1>
+        <p class="text-center text-gray-500 mb-6">
+            Buat gambar quote keren dengan tampilan status bar iPhone!
+        </p>
+
+        <!-- Form Input -->
+        <form id="quoteForm" class="space-y-4">
+            <div class="space-y-2">
+                <label for="text" class="block text-sm font-medium text-gray-700">Teks Quote (Maksimal 150 karakter):</label>
+                <textarea id="text" name="text" rows="4" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" placeholder="Masukkan teks quote di sini..." required></textarea>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="space-y-2">
+                    <label for="time" class="block text-sm font-medium text-gray-700">Waktu (HH:MM):</label>
+                    <input type="time" id="time" name="time" value="09:41" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required>
+                </div>
+                
+                <div class="space-y-2">
+                    <label for="battery" class="block text-sm font-medium text-gray-700">Baterai (%):</label>
+                    <input type="number" id="battery" name="battery" min="0" max="100" value="100" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required>
+                </div>
+            </div>
+            
+            <button type="submit" id="generateButton" class="w-full py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 transition duration-150 ease-in-out">
+                Buat Gambar Quote
+            </button>
+        </form>
+
+        <!-- Area Hasil -->
+        <div class="result-container mt-8 pt-6 border-t border-gray-200 text-center">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">🖼️ Hasil Gambar</h2>
+            
+            <!-- Pesan Loading -->
+            <div id="loadingMessage" class="hidden flex justify-center items-center p-4 bg-yellow-100 text-yellow-800 rounded-lg">
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-yellow-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Membuat gambar, mohon tunggu...
+            </div>
+            
+            <!-- Area Gambar dan Download -->
+            <img id="quoteImage" class="hidden mx-auto shadow-lg ring-4 ring-indigo-200 mt-4" alt="Gambar Quote iPhone yang Dibuat">
+            
+            <a id="downloadLink" class="hidden mt-4 inline-block py-2 px-6 bg-green-500 text-white font-medium rounded-lg hover:bg-green-600 transition duration-150" href="#" download="iphone_quote.png">
+                Unduh Gambar
+            </a>
+        </div>
+    </div>
+
+    <!-- Script JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('quoteForm');
+            const quoteImage = document.getElementById('quoteImage');
+            const downloadLink = document.getElementById('downloadLink');
+            const loadingMessage = document.getElementById('loadingMessage');
+            const generateButton = document.getElementById('generateButton');
+            
+            const API_URL_BASE = 'https://apiku.ubed.my.id/api/iphonequote';
+
+            // Fungsi untuk menampilkan pesan error kustom
+            function displayError(message) {
+                // Sembunyikan loading dan elemen hasil
+                loadingMessage.classList.add('hidden');
+                quoteImage.classList.add('hidden');
+                downloadLink.classList.add('hidden');
+                generateButton.disabled = false;
+                generateButton.textContent = 'Buat Gambar Quote';
+
+                // Tampilkan pesan kesalahan dalam modal sederhana atau div
+                alert(message); // Menggunakan alert() hanya untuk memberikan pesan kesalahan yang jelas
+            }
+            
+            // Fungsi untuk membuat quote dan menampilkan gambar
+            async function generateQuote(event) {
+                event.preventDefault(); // Mencegah form submit
+                
+                // Ambil nilai dari form
+                const textValue = document.getElementById('text').value.trim();
+                const timeValue = document.getElementById('time').value.trim();
+                const batteryValue = document.getElementById('battery').value.trim();
+                
+                if (!textValue || !timeValue || !batteryValue) {
+                    displayError('Semua kolom harus diisi!');
+                    return;
+                }
+
+                // Persiapan UI
+                quoteImage.classList.add('hidden');
+                downloadLink.classList.add('hidden');
+                loadingMessage.classList.remove('hidden');
+                generateButton.disabled = true;
+                generateButton.textContent = 'Memproses...';
+
+                // Encode parameter untuk URL
+                const params = new URLSearchParams({
+                    text: textValue,
+                    time: timeValue,
+                    battery: batteryValue
+                });
+
+                const apiUrl = `${API_URL_BASE}?${params.toString()}`;
+
+                try {
+                    // Cukup set src gambar ke URL API karena API langsung mengembalikan data gambar
+                    quoteImage.src = apiUrl;
+                    
+                    // Gunakan promise untuk menunggu gambar dimuat atau gagal
+                    await new Promise((resolve, reject) => {
+                        quoteImage.onload = resolve;
+                        quoteImage.onerror = reject;
+                    });
+                    
+                    // Jika sukses
+                    loadingMessage.classList.add('hidden');
+                    quoteImage.classList.remove('hidden');
+                    downloadLink.href = apiUrl; // Set link download ke URL API
+                    downloadLink.classList.remove('hidden');
+                    generateButton.textContent = 'Buat Gambar Quote';
+
+                } catch (error) {
+                    console.error('Error fetching/loading image:', error);
+                    displayError('Gagal memuat gambar dari API. Mungkin parameter API tidak valid atau ada masalah jaringan.');
+                } finally {
+                    generateButton.disabled = false;
+                }
+            }
+
+            // Tambahkan event listener ke form
+            form.addEventListener('submit', generateQuote);
+        });
+    </script>
+</body>
+</html>
+
