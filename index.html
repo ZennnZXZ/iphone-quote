@@ -3,80 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Quote iPhone</title>
+    <title>Generator Quote iPhone Keren</title>
     <!-- Memuat Tailwind CSS untuk styling -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* Custom styles untuk memastikan textarea dan gambar terlihat baik */
+        /* Menggunakan latar belakang yang lebih gelap dengan gradien yang halus */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d0d1a; /* Sangat gelap, mendekati hitam */
+            /* Gradien lembut untuk kedalaman */
+            background-image: radial-gradient(at top, #1f1f40 0%, #0d0d1a 80%);
+            color: #e5e7eb; /* Teks default terang */
+        }
+
+        /* Styling untuk card utama */
+        #app {
+            background: rgba(255, 255, 255, 0.95); /* Sedikit transparan */
+            backdrop-filter: blur(10px); /* Efek blur ala iOS */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Styling untuk input fokus */
+        input:focus, textarea:focus {
+            --tw-ring-color: #6366f1 !important; /* Indigo-500 */
+            border-color: #6366f1 !important;
+        }
+
+        /* Custom scrollbar untuk elemen textarea */
+        textarea::-webkit-scrollbar {
+            width: 8px;
+        }
+        textarea::-webkit-scrollbar-thumb {
+            background: #a5b4fc;
+            border-radius: 4px;
+        }
+        textarea::-webkit-scrollbar-thumb:hover {
+            background: #818cf8;
+        }
+        
+        /* Gambar Quote: Tambahkan sedikit 'angkat' */
         #quoteImage {
             max-width: 100%;
             height: auto;
-            transition: opacity 0.3s;
+            border-radius: 1.5rem; /* Lebih membulat */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease-in-out;
         }
+        
+        #quoteImage:hover {
+            transform: scale(1.02);
+        }
+        
         .hidden {
             display: none;
         }
-        .container {
-            font-family: 'Inter', sans-serif;
-        }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+<body class="min-h-screen flex flex-col justify-between items-center p-4">
 
-    <div id="app" class="container bg-white p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-lg">
+    <!-- Container Utama Aplikasi -->
+    <div class="w-full max-w-lg relative mt-6 mb-12 sm:mt-10">
         
-        <h1 class="text-3xl font-bold text-center text-indigo-600 mb-6">
-            📱 Generator Quote iPhone
-        </h1>
-        <p class="text-center text-gray-500 mb-6">
-            Buat gambar quote keren dengan tampilan status bar iPhone!
-        </p>
-
-        <!-- Form Input -->
-        <form id="quoteForm" class="space-y-4">
-            <div class="space-y-2">
-                <label for="text" class="block text-sm font-medium text-gray-700">Teks Quote (Maksimal 150 karakter):</label>
-                <textarea id="text" name="text" rows="4" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" placeholder="Masukkan teks quote di sini..." required></textarea>
-            </div>
+        <!-- Dropdown Menu (About Us) -->
+        <div id="aboutMenu" class="absolute top-0 right-0 z-50">
+            <button id="menuButton" class="text-gray-300 hover:text-indigo-400 bg-gray-800/50 hover:bg-gray-700/70 backdrop-blur-sm transition duration-150 p-3 rounded-full focus:outline-none focus:ring-4 focus:ring-indigo-500/50" aria-label="About Us Menu">
+                <!-- Ellipsis (Three Dots) SVG Icon -->
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+                </svg>
+            </button>
             
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div id="dropdownContent" class="hidden absolute right-0 mt-3 w-72 origin-top-right bg-white rounded-xl shadow-2xl ring-1 ring-black ring-opacity-10 divide-y divide-gray-100 animate-in fade-in zoom-in-95 duration-200">
+                <div class="p-5">
+                    <h3 class="text-xl font-extrabold text-indigo-700 mb-2">Tentang Generator</h3>
+                    <p class="text-sm text-gray-600 mb-4">Aplikasi ini adalah generator gambar kutipan instan yang meniru gaya UI status bar iPhone yang ikonik.</p>
+                    
+                    <h4 class="font-bold text-gray-800 mt-3 mb-1">Cara Menggunakan:</h4>
+                    <ul class="list-disc list-inside text-sm text-gray-600 space-y-1 ml-2">
+                        <li>Input teks quote (maks 150 karakter).</li>
+                        <li>Atur waktu dan persentase baterai.</li>
+                        <li>Tekan "Buat Gambar Quote".</li>
+                        <li>Gambar akan muncul dan siap diunduh.</li>
+                    </ul>
+                    
+                    <div class="mt-4 border-t pt-3">
+                        <p class="text-xs text-gray-500">
+                            Dibuat oleh: <span class="font-medium text-indigo-600">Ryzen Thawne</span>
+                        </p>
+                        <p class="text-xs text-gray-500">
+                            Kontak: <a href="tel:085297424012" class="text-indigo-500 hover:underline">085297424012</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Application Card -->
+        <div id="app" class="container p-6 sm:p-10 rounded-3xl shadow-2xl shadow-indigo-600/40 transform transition duration-500 hover:shadow-indigo-500/60 ring-2 ring-indigo-200/50">
+            
+            <h1 class="text-3xl sm:text-4xl font-black text-center text-indigo-700 mb-2 mt-2">
+                iPhone Quote Creator
+            </h1>
+            <p class="text-center text-gray-500 mb-6 font-medium">
+                Buat quote estetik ala status bar iOS dengan cepat.
+            </p>
+
+            <!-- Error Message Box (Custom Alert) -->
+            <div id="errorMessage" class="hidden p-4 mb-4 bg-red-50 text-red-700 rounded-xl border border-red-300 font-semibold transition duration-300 shadow-sm">
+                <!-- Message will be inserted here -->
+            </div>
+
+            <!-- Form Input -->
+            <form id="quoteForm" class="space-y-6">
                 <div class="space-y-2">
-                    <label for="time" class="block text-sm font-medium text-gray-700">Waktu (HH:MM):</label>
-                    <input type="time" id="time" name="time" value="09:41" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required>
+                    <label for="text" class="block text-sm font-semibold text-gray-700">Teks Quote (Maksimal 150 karakter):</label>
+                    <textarea id="text" name="text" rows="4" maxlength="150" class="w-full p-4 border border-indigo-300 rounded-xl focus:ring-4 focus:ring-indigo-200 transition duration-200 resize-none shadow-md text-gray-800 placeholder-gray-400" placeholder="Masukkan teks quote di sini..." required></textarea>
                 </div>
                 
-                <div class="space-y-2">
-                    <label for="battery" class="block text-sm font-medium text-gray-700">Baterai (%):</label>
-                    <input type="number" id="battery" name="battery" min="0" max="100" value="100" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" required>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <label for="time" class="block text-sm font-semibold text-gray-700">Waktu (HH:MM):</label>
+                        <input type="time" id="time" name="time" value="09:41" class="w-full p-4 border border-indigo-300 rounded-xl focus:ring-4 focus:ring-indigo-200 transition duration-200 shadow-md text-gray-800" required>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <label for="battery" class="block text-sm font-semibold text-gray-700">Baterai (%):</label>
+                        <input type="number" id="battery" name="battery" min="0" max="100" value="100" class="w-full p-4 border border-indigo-300 rounded-xl focus:ring-4 focus:ring-indigo-200 transition duration-200 shadow-md text-gray-800" required>
+                    </div>
                 </div>
-            </div>
-            
-            <button type="submit" id="generateButton" class="w-full py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 transition duration-150 ease-in-out">
-                Buat Gambar Quote
-            </button>
-        </form>
+                
+                <button type="submit" id="generateButton" class="w-full py-4 bg-indigo-600 text-white font-extrabold text-lg rounded-xl shadow-xl shadow-indigo-500/50 hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-70 transition duration-300 ease-in-out transform hover:scale-[1.01] active:scale-[0.98]">
+                    🚀 Buat Gambar Quote
+                </button>
+            </form>
 
-        <!-- Area Hasil -->
-        <div class="result-container mt-8 pt-6 border-t border-gray-200 text-center">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">🖼️ Hasil Gambar</h2>
-            
-            <!-- Pesan Loading -->
-            <div id="loadingMessage" class="hidden flex justify-center items-center p-4 bg-yellow-100 text-yellow-800 rounded-lg">
-                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-yellow-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Membuat gambar, mohon tunggu...
+            <!-- Area Hasil -->
+            <div class="result-container mt-10 pt-6 border-t border-gray-200 text-center">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">✨ Pratinjau Quote Anda</h2>
+                
+                <!-- Pesan Loading -->
+                <div id="loadingMessage" class="hidden flex justify-center items-center p-4 bg-indigo-50 text-indigo-700 rounded-xl font-semibold border border-indigo-200 shadow-md">
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Membuat gambar estetik, mohon tunggu sebentar...
+                </div>
+                
+                <!-- Area Gambar dan Download -->
+                <img id="quoteImage" class="hidden mx-auto mt-4 ring-4 ring-indigo-300/50 max-w-full" alt="Gambar Quote iPhone yang Dibuat">
+                
+                <a id="downloadLink" class="hidden mt-8 inline-block py-4 px-10 bg-green-600 text-white font-extrabold text-lg rounded-xl hover:bg-green-700 transition duration-300 shadow-xl shadow-green-500/50 transform hover:scale-[1.05] active:scale-[0.98]" href="#" download="iphone_quote_ryzen.png">
+                    ⬇️ Unduh Gambar Resolusi Tinggi
+                </a>
             </div>
-            
-            <!-- Area Gambar dan Download -->
-            <img id="quoteImage" class="hidden mx-auto shadow-lg ring-4 ring-indigo-200 mt-4" alt="Gambar Quote iPhone yang Dibuat">
-            
-            <a id="downloadLink" class="hidden mt-4 inline-block py-2 px-6 bg-green-500 text-white font-medium rounded-lg hover:bg-green-600 transition duration-150" href="#" download="iphone_quote.png">
-                Unduh Gambar
-            </a>
         </div>
     </div>
+    
+    <!-- Footer -->
+    <footer class="w-full mt-auto p-4 text-center text-gray-500 text-xs sm:text-sm">
+        <p>Aplikasi ini dibuat untuk tujuan hiburan dan kreatif. UI oleh Ryzen Thawne &copy; 2025</p>
+    </footer>
 
     <!-- Script JavaScript -->
     <script>
@@ -86,33 +174,101 @@
             const downloadLink = document.getElementById('downloadLink');
             const loadingMessage = document.getElementById('loadingMessage');
             const generateButton = document.getElementById('generateButton');
+            const errorMessage = document.getElementById('errorMessage');
+            const menuButton = document.getElementById('menuButton');
+            const dropdownContent = document.getElementById('dropdownContent');
             
-            const API_URL_BASE = 'https://apiku.ubed.my.id/api/iphonequote';
+            // Toggle dropdown menu
+            menuButton.addEventListener('click', (e) => {
+                e.stopPropagation(); // Mencegah klik dari menutup menu segera
+                dropdownContent.classList.toggle('hidden');
+            });
 
-            // Fungsi untuk menampilkan pesan error kustom
+            // Close dropdown if clicked outside
+            document.addEventListener('click', (event) => {
+                if (!menuButton.contains(event.target) && !dropdownContent.contains(event.target)) {
+                    dropdownContent.classList.add('hidden');
+                }
+            });
+            
+            // Menggunakan URL API yang sudah ada
+            const API_URL_BASE = 'https://apiku.ubed.my.id/api/iphonequote';
+            const MAX_RETRIES = 3;
+            const BACKOFF_TIME = 2000; // 2 seconds
+
+            // Fungsi untuk menampilkan pesan error kustom (menggantikan alert)
             function displayError(message) {
-                // Sembunyikan loading dan elemen hasil
+                // Reset UI state
                 loadingMessage.classList.add('hidden');
                 quoteImage.classList.add('hidden');
                 downloadLink.classList.add('hidden');
                 generateButton.disabled = false;
-                generateButton.textContent = 'Buat Gambar Quote';
+                generateButton.textContent = '🚀 Buat Gambar Quote';
 
-                // Tampilkan pesan kesalahan dalam modal sederhana atau div
-                alert(message); // Menggunakan alert() hanya untuk memberikan pesan kesalahan yang jelas
+                // Tampilkan pesan kesalahan di UI
+                errorMessage.textContent = message;
+                errorMessage.classList.remove('hidden');
+                
+                // Sembunyikan pesan kesalahan setelah 6 detik
+                setTimeout(() => {
+                    errorMessage.classList.add('hidden');
+                }, 6000);
+            }
+            
+            // Fungsi dengan backoff eksponensial untuk fetch gambar
+            async function fetchWithRetry(url) {
+                for (let i = 0; i < MAX_RETRIES; i++) {
+                    try {
+                        const response = await fetch(url);
+                        if (response.ok) {
+                            // Cek apakah response benar-benar gambar
+                            const contentType = response.headers.get('Content-Type');
+                            if (contentType && contentType.startsWith('image/')) {
+                                return response;
+                            } else {
+                                // Jika API mengembalikan non-gambar (misalnya JSON error)
+                                let errorText = 'API mengembalikan format yang tidak terduga.';
+                                try {
+                                    const errorJson = await response.json();
+                                    errorText = errorJson.message || errorText;
+                                } catch (e) {
+                                    // Abaikan jika bukan JSON
+                                }
+                                throw new Error(`Gagal membuat quote: ${errorText}`);
+                            }
+                        } else {
+                            throw new Error(`Gagal mengambil data dari API: Status ${response.status}`);
+                        }
+                    } catch (error) {
+                        // Jangan mencoba lagi jika ini adalah percobaan terakhir
+                        if (i === MAX_RETRIES - 1) {
+                            throw error;
+                        }
+                        // Tunggu sebentar sebelum mencoba lagi
+                        const delay = BACKOFF_TIME * Math.pow(2, i);
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        // console.log(`Retry ${i + 1}/${MAX_RETRIES} setelah ${delay}ms`);
+                    }
+                }
             }
             
             // Fungsi untuk membuat quote dan menampilkan gambar
             async function generateQuote(event) {
-                event.preventDefault(); // Mencegah form submit
+                event.preventDefault(); 
                 
-                // Ambil nilai dari form
+                errorMessage.classList.add('hidden');
+
                 const textValue = document.getElementById('text').value.trim();
                 const timeValue = document.getElementById('time').value.trim();
                 const batteryValue = document.getElementById('battery').value.trim();
                 
                 if (!textValue || !timeValue || !batteryValue) {
-                    displayError('Semua kolom harus diisi!');
+                    displayError('⚠️ Semua kolom (Teks, Waktu, Baterai) harus diisi!');
+                    return;
+                }
+                
+                if (textValue.length > 150) {
+                     displayError(`Teks terlalu panjang (${textValue.length} karakter). Maksimal 150 karakter.`);
                     return;
                 }
 
@@ -121,7 +277,8 @@
                 downloadLink.classList.add('hidden');
                 loadingMessage.classList.remove('hidden');
                 generateButton.disabled = true;
-                generateButton.textContent = 'Memproses...';
+                generateButton.textContent = 'Memproses Gambar...';
+                generateButton.classList.add('opacity-70'); // Tambahkan visual disabled
 
                 // Encode parameter untuk URL
                 const params = new URLSearchParams({
@@ -133,27 +290,53 @@
                 const apiUrl = `${API_URL_BASE}?${params.toString()}`;
 
                 try {
-                    // Cukup set src gambar ke URL API karena API langsung mengembalikan data gambar
+                    // Coba ambil gambar dengan retry logic
+                    await fetchWithRetry(apiUrl);
+                    
+                    // Jika fetch berhasil (kode status 200 dan format gambar)
                     quoteImage.src = apiUrl;
                     
                     // Gunakan promise untuk menunggu gambar dimuat atau gagal
                     await new Promise((resolve, reject) => {
                         quoteImage.onload = resolve;
-                        quoteImage.onerror = reject;
+                        // Tambahkan timeout agar tidak menunggu terlalu lama jika API lambat
+                        const timeout = setTimeout(() => reject(new Error("Timeout memuat gambar.")), 20000); 
+                        
+                        quoteImage.onload = () => {
+                            clearTimeout(timeout);
+                            resolve();
+                        };
+                        
+                        quoteImage.onerror = (e) => {
+                            clearTimeout(timeout);
+                            // Cek jika error murni dari gambar, bukan dari fetch API
+                            if (e instanceof Event) {
+                                reject(new Error('Gagal memuat gambar setelah API merespons. Mungkin masalah format gambar.'));
+                            } else {
+                                reject(e);
+                            }
+                        };
                     });
                     
                     // Jika sukses
                     loadingMessage.classList.add('hidden');
                     quoteImage.classList.remove('hidden');
-                    downloadLink.href = apiUrl; // Set link download ke URL API
+                    downloadLink.href = apiUrl; 
                     downloadLink.classList.remove('hidden');
-                    generateButton.textContent = 'Buat Gambar Quote';
+                    generateButton.textContent = '✅ Gambar Quote Berhasil Dibuat!';
+                    generateButton.classList.remove('opacity-70');
+
 
                 } catch (error) {
-                    console.error('Error fetching/loading image:', error);
-                    displayError('Gagal memuat gambar dari API. Mungkin parameter API tidak valid atau ada masalah jaringan.');
+                    console.error('Error fetching/loading image:', error.message);
+                    displayError(`🚫 ${error.message}. Coba periksa kembali input Anda.`);
                 } finally {
-                    generateButton.disabled = false;
+                    // Set tombol kembali normal setelah beberapa saat meskipun sukses
+                    setTimeout(() => {
+                        generateButton.textContent = '🚀 Buat Gambar Quote';
+                        generateButton.disabled = false;
+                        generateButton.classList.remove('opacity-70'); 
+                    }, 4000); 
                 }
             }
 
@@ -164,3 +347,4 @@
 </body>
 </html>
 
+    
